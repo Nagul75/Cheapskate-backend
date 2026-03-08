@@ -40,7 +40,7 @@ export async function verifyAccessToken(token: string): Promise<JWTPayload> {
     throw new TokenError("INVALID TOKEN");
   }
 
-  return { sub: payload.sub, email: payload.email };
+  return { sub: payload.sub, email: payload.email, name: typeof payload.name === "string" ? payload.name : null, };
 }
 
 // HELPER FUNCTIONS

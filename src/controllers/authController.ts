@@ -81,7 +81,7 @@ async function login(req: Request, res: Response) {
   try {
     const [accessToken, refreshToken] = await prisma.$transaction(
       async (tx) => {
-        const at = await signAccessToken({ sub: user.id, email: user.email });
+        const at = await signAccessToken({ sub: user.id, email: user.email, name: user.name });
         const rt = await createRefreshToken(user.id, tx);
         return [at, rt];
       },
@@ -109,7 +109,7 @@ async function refresh(req: Request, res: Response) {
     const user = await findUserById(userId);
 
     if (!user) {
-      res.status(401).json({ error: "User not found" });
+      res.status(404).json({ error: "User not found" });
       return;
     }
 
@@ -119,7 +119,7 @@ async function refresh(req: Request, res: Response) {
     });
 
     res.cookie("refreshToken", newRefreshToken, COOKIE_OPTIONS);
-    res.json({ accessToken });
+    res.status(200).json({ accessToken });
   } catch (err) {
     if (err instanceof TokenError) {
       res.clearCookie("refreshToken", { path: "/auth/refresh" });

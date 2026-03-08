@@ -19,7 +19,7 @@ export async function authenticate(
 
   try {
     const payload = await verifyAccessToken(token);
-    req.user = { id: payload.sub, email: payload.email };
+    req.user = { id: payload.sub, email: payload.email, name: payload.name };
     next();
   } catch (err: any) {
     console.error("JWT verify error:", err.code, err.message);
