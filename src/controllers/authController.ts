@@ -116,6 +116,7 @@ async function refresh(req: Request, res: Response) {
     const accessToken = await signAccessToken({
       sub: user.id,
       email: user.email,
+      name: user.name,
     });
 
     res.cookie("refreshToken", newRefreshToken, COOKIE_OPTIONS);
