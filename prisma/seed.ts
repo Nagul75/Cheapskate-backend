@@ -11,6 +11,7 @@ export const prisma = new PrismaClient({adapter});
 const defaultCategories: { name: string; type: TransactionType; icon: string }[] = [
   // Expense categories
   { name: "Housing",        type: "EXPENSE", icon: "house" },
+  {name: "Food",            type: "EXPENSE", icon: "apple" },
   { name: "Groceries",      type: "EXPENSE", icon: "shopping-cart" },
   { name: "Transport",      type: "EXPENSE", icon: "car" },
   { name: "Utilities",      type: "EXPENSE", icon: "zap" },
@@ -36,20 +37,26 @@ async function main() {
     console.log("Seeding start")
 
     for (const category of defaultCategories) {
-        await prisma.category.upsert({
+        const existing = await prisma.category.findFirst({
             where: {
-                name_isDefault: {
-                    name: category.name,
-                    isDefault: true
-                }
-            },
-            update: {},
-            create: {
-                userId: null,
+                name: category.name,
                 isDefault: true,
-                ...category
+                userId: null
             }
         });
+
+        if (!existing) {
+            await prisma.category.create({
+                data: {
+                    userId: null,
+                    isDefault: true,
+                    ...category
+                }
+            });
+            console.log(`Created category: ${category.name}`);
+        } else {
+            console.log(`Skipped (already exists): ${category.name}`);
+        }
     }
 
     console.log("Done.")

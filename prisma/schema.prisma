@@ -70,7 +70,7 @@ model Account {
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   transactions Transaction[]
-
+  budgets Budget[]
   @@map("accounts")
 }
 
@@ -79,7 +79,6 @@ model Category {
   userId  String? @map("user_id") // null = default / system category (Groceries, Food, ...)
   name  String
   type  TransactionType
-  color String  @default("#0d9488")
   icon  String  @default("circle")
   isDefault Boolean  @default(false) @map("is_default")
   createdAt DateTime @default(now())  @map("created_at")
@@ -118,6 +117,7 @@ model Transaction {
 model Budget {
   id  String @id @default(uuid())
   userId  String  @map("user_id")
+  accountId String  @map("account_id")
   description  String?
   categoryId  String? @map("category_id")
   amount  Decimal @db.Decimal(12, 2)
@@ -127,6 +127,7 @@ model Budget {
   updatedAt DateTime  @updatedAt  @map("updated_at")
 
   user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
   category Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
 
   @@unique([userId, categoryId, month, year])
