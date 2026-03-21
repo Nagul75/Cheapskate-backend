@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 
 import prisma from "../db/prisma";
 import { TransactionType } from "../generated/prisma/enums";
-import { Prisma } from "../generated/prisma/client";
 
 async function getUserTransactions(req: Request, res: Response) {
   const user = req.user;
