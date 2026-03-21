@@ -1,98 +1,60 @@
-# Cheapskate  
-**Personal Finance & Budget Management Platform**
+# Cheapskate Backend
 
-Cheapskate is a production-style, full-stack personal finance application that enables users to securely track accounts, transactions, budgets, and spending insights. The project emphasizes backend correctness, data integrity, and a clean, responsive user experience.
+Backend service powering **Cheapskate**, a production-ready personal finance platform for managing accounts, transactions, and budgets, with real time analytics and high-performance dashboards.
 
-This project is **actively developed** and reflects real-world engineering concerns such as authentication lifecycle management, transactional consistency, and scalable frontend state handling.
+- Live Link: https://cheapskate.in
+- Frontend: https://github.com/Nagul75/cheapskate-frontend
 
----
+  ![MacBook_Pro_Cheapskate](https://github.com/user-attachments/assets/f64113ab-874c-47b7-a5c2-4aaf75819266)
 
 ## Overview
 
-Cheapskate allows users to:
-- Manage multiple financial accounts
-- Track income and expenses with strong consistency guarantees
-- Create monthly budgets per category
-- Visualize spending trends and category breakdowns
-- Securely authenticate and access their own data only
-
-The system is designed with a clear separation of concerns between backend APIs and frontend state, mirroring real production architectures.
-
----
+A scalable REST API built with Node.js and PostgreSQL, designed with a focus on security, data integrity, and performance.
 
 ## Tech Stack
 
-### Backend
-- Node.js, Express
-- PostgreSQL
+- Node.js + Express
+- PostgreSQL (AWS RDS)
 - Prisma ORM
-- JWT (Access + Refresh tokens)
-- Zod (schema validation)
+- JWT Authentication (Access + Refresh Tokens)
+- Zod (Validation)
+- Docker (Deployment)
 
-### Frontend
-- React (Vite)
-- shadcn/ui
-- React Query (TanStack Query)
-- Axios
-- Recharts
-- react-hook-form + Zod
+## Core Features
 
----
+- **Authentication & Security**
+  - JWT-based auth with refresh token rotation
+  - Tiered rate limiting (stricter for auth routes)
+  - User-scoped authorization (strict data isolation)
 
-## Key Features
+- **Financial Domain Modeling**
+  - Accounts, transactions, categories, budgets
+  - Transaction-safe balance reconciliation
+  - Multi-currency support
 
-### Authentication & Security
-- JWT-based authentication with access and refresh token flow
-- Protected routes on both backend and frontend
-- Authorization checks ensuring users can only access their own data
-- Secure password hashing with bcrypt
+- **Analytics APIs**
+  - Monthly summaries (income, expenses, net)
+  - Category-wise aggregation
+  - Time-series financial trends
 
----
+## System Design Highlights
 
-### Accounts & Transactions
-- Multiple accounts per user
-- Transaction creation, updates, and deletion
-- Automatic account balance reconciliation on every transaction change
-- Advanced filtering by date range, category, account, and type
+- Designed modular architecture (routes, controllers, middleware)
+- Optimized query performance using **composite indexing aligned with access patterns**
+- Structured APIs to support **data-heavy aggregation workloads**
 
----
+## Performance
 
-### Budgets
-- Monthly budgets per category
-- Real-time budget utilization tracking
-- Over-budget indicators and visual warnings
-- Budget creation, updates, and deletion
+- Optimized for low-latency API responses
+- Efficient handling of user-scoped financial data queries
+- Rate limiting to maintain stability under load
 
----
+## Deployment
 
-### Analytics Dashboard
-- Monthly income, expenses, and net balance summary
-- Spending grouped by category (pie/donut charts)
-- Spending trends over time (line/area charts)
-- Configurable date range with current-month defaults
+- AWS EC2 (Dockerized backend)
+- AWS RDS (PostgreSQL)
 
----
+## Notes
 
-### Frontend UX
-- Responsive layout with sidebar navigation
-- Loading skeletons and empty states for all views
-- Optimistic UI updates for transactions
-- Error handling with toast notifications
-- Light/Dark mode support
-
----
-
-## Architecture Highlights
-
-### Backend
-- RESTful API design with modular routing
-- Centralized error handling middleware
-- Input validation on all endpoints using Zod
-- Transaction-safe financial logic to ensure balance consistency
-- Clean separation between routes, controllers, and database layer
-
-### Frontend
-- API abstraction layer using Axios
-- Global data fetching and caching with React Query
-- Form state and validation using react-hook-form + Zod
-- Reusable UI components built with shadcn/ui
+- All endpoints are secured and scoped per user
+- Designed with scalability and extensibility in mind
